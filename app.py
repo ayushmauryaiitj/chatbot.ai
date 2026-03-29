@@ -75,4 +75,4 @@ else:
     st.info(tr("Type a query to see recommendations", "सुझाव देखने के लिए लिखें"))
 
 st.divider()
-st.caption(tr("💡 Be specific for better results", "💡 सही परिणाम के लिए विशिष्ट रहें")
+st.caption(tr("💡 Be specific for better results", "💡 सही परिणाम के लिए विशिष्ट रहें"))
