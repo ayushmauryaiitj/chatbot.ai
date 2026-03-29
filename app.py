@@ -83,7 +83,7 @@ def find_schemes(query):
  query_lower = query.lower()
  matches = []
  for scheme in SCHEMES:
- score = sum(1 for kw in scheme["keywords"] if kw.lower() in query_lower) * 20
+    score = sum(1 for kw in scheme["keywords"] if kw.lower() in query_lower) * 20
  if score > 0:
  scheme_copy = scheme.copy()
  scheme_copy["score"] = score
