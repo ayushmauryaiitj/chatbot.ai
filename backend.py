@@ -1,8 +1,8 @@
 import json
 import os
-from openai import OpenAI
+import openai
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def load_schemes():
     with open("data/schemes.json", "r") as f:
@@ -17,20 +17,17 @@ def recommend_schemes(user_input):
     ])
 
     prompt = f"""
-    You are a helpful Indian government schemes assistant.
+    Suggest best government schemes.
 
-    User Input:
-    {user_input}
+    User: {user_input}
 
-    Available Schemes:
+    Schemes:
     {context}
-
-    Suggest best schemes with reasons in simple language.
     """
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}]
     )
 
-    return response.choices[0].message.content
+    return response['choices'][0]['message']['content']
