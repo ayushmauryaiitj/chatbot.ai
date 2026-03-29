@@ -1,51 +1,82 @@
 import streamlit as st
+
 from backend import recommend_schemes
 from utils import translate_text
 
-# Config
+# ---------- Page config ----------
 st.set_page_config(page_title="SchemeSetu AI", layout="wide")
 
-# Sidebar
+# ---------- Sidebar settings ----------
 st.sidebar.title("⚙️ Settings")
-theme = st.sidebar.selectbox("Theme", ["Light", "Dark"])
-lang = st.sidebar.selectbox("Language", ["English", "Hindi"])
 
-# Theme
+theme = st.sidebar.selectbox("Theme", ["Light", "Dark"], index=0)
+lang = st.sidebar.selectbox("Language", ["English", "Hindi"], index=0)
+
+# ---------- Theme handling (simple) ----------
+# Streamlit theming is usually managed via .streamlit/config.toml,
+# but a minimal CSS tweak is added here for the Dark option.
 if theme == "Dark":
-    st.markdown("""
+    st.markdown(
+        """
         <style>
-        body { background-color: #0E1117; color: white; }
-        .stTextInput input { background-color: #1E1E1E; color: white; }
+        body {
+            background-color: #0E1117;
+            color: #FAFAFA;
+        }
+        .stTextInput > div > div > input {
+            background-color: #1E1E1E;
+            color: #FAFAFA;
+        }
+        .stChatMessage {
+            color: #FAFAFA;
+        }
         </style>
-    """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True,
+    )
 
-# Header
+# ---------- Header ----------
 st.title("🇮🇳 SchemeSetu AI")
 st.caption("Your Smart Government Scheme Assistant")
 
-# Chat history
+# ---------- Session state for chat ----------
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat
+# ---------- Render existing chat history ----------
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
-        st.write(msg["content"])
+        st.markdown(msg["content"])
 
-# Input
+# ---------- Chat input ----------
 user_input = st.chat_input("Type your query...")
 
 if user_input:
+    # Store and render user message
     st.session_state.messages.append({"role": "user", "content": user_input})
-
     with st.chat_message("user"):
-        st.write(user_input)
+        st.markdown(user_input)
 
+    # Assistant response
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = recommend_schemes(user_input)
-            response = translate_text(response, lang)
+            try:
+                raw_response = recommend_schemes(user_input)
+            except Exception:
+                raw_response = (
+                    "Service temporarily unavailable. "
+                    "Please try again after some time."
+                )
 
-            st.write(response)
+            # Translation (non-fatal)
+            try:
+                final_response = translate_text(raw_response, lang)
+            except Exception:
+                final_response = raw_response
 
-    st.session_state.messages.append({"role": "assistant", "content": response})
+            st.markdown(final_response)
+
+    # Save assistant message to history
+    st.session_state.messages.append(
+        {"role": "assistant", "content": final_response}
+    )
