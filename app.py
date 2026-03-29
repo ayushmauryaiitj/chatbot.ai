@@ -13,7 +13,8 @@ SCHEMES = [
         "benefit_hi": "साल में ₹6000 तीन किस्तों में",
         "how_to_apply": "Visit pmkisan.gov.in with Aadhaar and land documents",
         "how_to_apply_hi": "pmkisan.gov.in पर जाएं, आधार और के साथ",
-        "link": "https://pmkisan.gov.in/"
+        "link": "https://pmkisan.gov.in/",
+        "link_text": "Apply at PM-Kisan"
     },
     {
         "name": "National Scholarship Portal",
@@ -25,7 +26,8 @@ SCHEMES = [
         "benefit_hi": "शिक्षा खर्च के लिए सहायता",
         "how_to_apply": "Register on scholarships.gov.in with required documents",
         "how_to_apply_hi": "scholarships.gov.in पर पंजीकरण करें",
-        "link": "https://scholarships.gov.in/"
+        "link": "https://scholarships.gov.in/",
+        "link_text": "Apply for Scholarship"
     },
     {
         "name": "Skill India",
@@ -37,7 +39,8 @@ SCHEMES = [
         "benefit_hi": "मुफ्त कौशल प्रशिक्षण और नौकरी सहायता",
         "how_to_apply": "Visit skillindia.gov.in and enroll in courses",
         "how_to_apply_hi": "skillindia.gov.in पर कोर्स लें",
-        "link": "https://skillindia.gov.in/"
+        "link": "https://skillindia.gov.in/",
+        "link_text": "Enroll in Skill India"
     }
 ]
 
@@ -68,14 +71,24 @@ def answer_question(query):
     
     if any(word in query_lower for word in ["eligibility", "पात्रता", "qualify"]):
         elig = scheme["eligibility_hi"] if st.session_state.lang == "हिंदी" else scheme["eligibility"]
-        return f"**{scheme['name']}**: {elig}", scheme
+        link = scheme["link"]
+        name = scheme["name_hi"] if st.session_state.lang == "हिंदी" else scheme["name"]
+        answer = f"**{name}**: {elig}\n\n[Visit Website]({link}) 🔗"
+        return answer, scheme
     elif any(word in query_lower for word in ["benefit", "लाभ", "मिलेगा"]):
         benefit = scheme["benefit_hi"] if st.session_state.lang == "हिंदी" else scheme["benefit"]
-        return f"**{scheme['name']}**: {benefit}", scheme
+        link = scheme["link"]
+        name = scheme["name_hi"] if st.session_state.lang == "हिंदी" else scheme["name"]
+        answer = f"**{name}**: {benefit}\n\n[Visit Website]({link}) 🔗"
+        return answer, scheme
     elif any(word in query_lower for word in ["apply", "कैसे", "how"]):
         how = scheme["how_to_apply_hi"] if st.session_state.lang == "हिंदी" else scheme["how_to_apply"]
-        return f"**{scheme['name']}**: {how}", scheme
+        link = scheme["link"]
+        name = scheme["name_hi"] if st.session_state.lang == "हिंदी" else scheme["name"]
+        answer = f"**{name}**: {how}\n\n[Apply Now]({link}) 🔗"
+        return answer, scheme
     else:
+        schemes = find_schemes(query)
         return None, schemes[:3]
 
 if "lang" not in st.session_state:
@@ -89,8 +102,8 @@ col1, col2 = st.columns([1, 4])
 with col1:
     st.session_state.lang = st.selectbox(tr("Language", "भाषा"), ["English", "हिंदी"])
 
-st.title(tr("🤖 Government Schemes Chatbot", "🤖 सरकारी योजनऺ चैटबॉट"))
-st.caption(tr("Ask about eligibility, benefits, how to apply!", "पछें: पात्रता, लाभ, कैसे आवेदन"))
+st.title(tr("🤖 Government Schemes Chatbot", "🤖 सरकारी योजनं चैटबॉट"))
+st.caption(tr("Ask about eligibility, benefits, how to apply!", "पुछें: पात्रता, लाभ, कैसे आवेदन"))
 
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
