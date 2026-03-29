@@ -1,0 +1,12 @@
+[
+  {
+    "name": "PM Kisan",
+    "eligibility": "Farmer",
+    "benefit": "6000/year"
+  },
+  {
+    "name": "Ayushman Bharat",
+    "eligibility": "Low income",
+    "benefit": "5 lakh insurance"
+  }
+]
