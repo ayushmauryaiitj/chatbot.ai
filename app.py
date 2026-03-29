@@ -3,15 +3,15 @@ import streamlit as st
 st.set_page_config(page_title="Government Schemes AI", page_icon="🏛️", layout="wide")
 
 SCHEMES = [
-    {"name": "PM Kisan Samman Nidhi", "name_hi": "पीएम किसान सम्मान निधि", "category": "Agriculture", "icon": "🌾", "keywords": ["farmer", "kisan", "agriculture", "किसान", "खेती"], "eligibility": "किसान परिवार", "eligibility_hi": "किसान परिवार", "benefit": ₹6000/year", "benefit_hi": "₹6000 प्रति वर्ष", "link": "https://pmkisan.gov.in/"},
-    {"name": "Scholarship Portal", "name_hi": "स्कॉलरशिप पोर्टल", "category": "Education", "icon": "🎓", "keywords": ["student", "education", "scholarship", "छात्र", "शिक्षा"], "eligibility": "भी धललवत", "eligibility_hi": "विद्यार्थी", "benefit": "Financial aid", "benefit_hi": "वित्तीय सहायता", "link": "https://scholarships.gov.in/"},
-    {"name": "Skill India", "name_hi": "स्किल इंडिया", "category": "Employment", "icon": "🛠️", "keywords": ["job", "skill", "training", "unemployed", "नौकरी"], "eligibility": "काम लगाने वाले", "eligibility_hi": "काम खोज रहे", "benefit": "Job training", "benefit_hi": "कौशल नतकसी", "link": "https://skillindia.gov.in/"},
-    {"name": "PM Jan Dhan", "name_hi": "पीएम जन धन", "category": "Banking", "icon": "🏦", "keywords": ["bank", "account", "dhan", "खाता"], "eligibility": "सब", "eligibility_hi": "सब", "benefit": "Bank account", "benefit_hi": "खाता खोलना", "link": "https://pmjdy.gov.in/"},
-    {"name": "Ayushman Bharat", "name_hi": "आयुष्मान भारत", "category": "Health", "icon": "🩺", "keywords": ["health", "hospital", "स्वास्थ्य"], "eligibility": "परिवार", "eligibility_hi": "परिवार", "benefit": "₹5L coverage", "benefit_hi": "₹5 लाख कवरेज", "link": "https://pmjay.gov.in/"},
+    {"name": "PM Kisan Samman Nidhi", "name_hi": "पीएम किसान सम्मान निधि", "category": "Agriculture", "icon": "🌾", "keywords": ["farmer", "kisan", "agriculture", "किसान", "खेती"], "eligibility": "किसान परिवार", "eligibility_hi": "किसान परिवार", "benefit": "6000 per year", "benefit_hi": "6000 प्रति वर्ष", "link": "https://pmkisan.gov.in/"},
+    {"name": "Scholarship Portal", "name_hi": "स्कॉलरशिप पोर्टल", "category": "Education", "icon": "🎓", "keywords": ["student", "education", "scholarship", "छात्र", "शिक्षा"], "eligibility": "विद्यार्थी", "eligibility_hi": "विद्यार्थी", "benefit": "Financial aid", "benefit_hi": "वित्तीय सहायता", "link": "https://scholarships.gov.in/"},
+    {"name": "Skill India", "name_hi": "स्किल इंडिया", "category": "Employment", "icon": "🛠️", "keywords": ["job", "skill", "training", "unemployed", "नौकरी"], "eligibility": "काम खोज रहे", "eligibility_hi": "काम खोज रहे", "benefit": "Job training", "benefit_hi": "कौशल प्रशिक्षण", "link": "https://skillindia.gov.in/"},
+    {"name": "PM Jan Dhan", "name_hi": "पीएम जन धन", "category": "Banking", "icon": "🏦", "keywords": ["bank", "account", "dhan", "खाता"], "eligibility": "सभी नागरिक", "eligibility_hi": "सभी नागरिक", "benefit": "Bank account", "benefit_hi": "खाता खोलना", "link": "https://pmjdy.gov.in/"},
+    {"name": "Ayushman Bharat", "name_hi": "आयुष्मान भारत", "category": "Health", "icon": "🩺", "keywords": ["health", "hospital", "स्वास्थ्य"], "eligibility": "परिवार", "eligibility_hi": "परिवार", "benefit": "5L health coverage", "benefit_hi": "5 लाख स्वास्थ्य कवरेज", "link": "https://pmjay.gov.in/"},
 ]
 
 def tr(en, hi):
-    return hi if st.session_state.lang == "🇮🇳 हिंदी" else en
+    return hi if st.session_state.lang == "हिंदी" else en
 
 def score_match(query, keywords):
     query_lower = query.lower()
@@ -26,14 +26,14 @@ st.markdown("<style>.stApp { background: linear-gradient(135deg, #04111d 0%, #0a
 
 col1, col2 = st.columns(2)
 with col1:
-    st.session_state.lang = st.selectbox("Language", ["English", "🇮🇳 हिंदी"], key="lang_select")
+    st.session_state.lang = st.selectbox("Language", ["English", "हिंदी"], key="lang_select")
 with col2:
     category = st.selectbox("Category", ["All"] + list(set(s["category"] for s in SCHEMES)))
 
 st.title(tr("🇮🇳 Government Schemes", "🇮🇳 सरकारी योजना"))
 st.write(tr("Find schemes tailored for you", "आपके लिए योजनाएं खोजें"))
 
-query = st.chat_input(tr("Tell us about yourself...", "अपने आप के का बताये..."))
+query = st.chat_input(tr("Tell us about yourself...", "अपने आप के बारे में बताये..."))
 
 if query:
     results = []
@@ -60,19 +60,19 @@ if st.session_state.results:
             with col1:
                 st.write(scheme["icon"])
             with col2:
-                name = scheme["name_hi"] if st.session_state.lang == "🇮🇳 हिंदी" else scheme["name"]
+                name = scheme["name_hi"] if st.session_state.lang == "हिंदी" else scheme["name"]
                 st.subheader(name)
                 st.write(f"{scheme['category']} | {scheme['score']}%")
                 
-                eligibility = scheme["eligibility_hi"] if st.session_state.lang == "🇮🇳 हिंदी" else scheme["eligibility"]
-                benefit = scheme["benefit_hi"] if st.session_state.lang == "🇮🇳 हिंदी" else scheme["benefit"]
+                eligibility = scheme["eligibility_hi"] if st.session_state.lang == "हिंदी" else scheme["eligibility"]
+                benefit = scheme["benefit_hi"] if st.session_state.lang == "हिंदी" else scheme["benefit"]
                 
                 st.write(f"**{tr('Eligibility', 'पात्रता')}**: {eligibility}")
                 st.write(f"**{tr('Benefit', 'लाभ')}**: {benefit}")
                 st.link_button(tr("Apply Now ↗", "आवेदन करें ↗"), scheme["link"])
             st.divider()
 else:
-    st.info(tr("Type a query to see recommendations", "ससिआषे देखने के लिए तुडलवाएं"))
+    st.info(tr("Type a query to see recommendations", "सुझाव देखने के लिए लिखें"))
 
 st.divider()
-st.caption(tr("🂡 Be specific for better results", "🂡 सही परिणाम के लिए सप़ण शमपित हों")
+st.caption(tr("💡 Be specific for better results", "💡 सही परिणाम के लिए विशिष्ट रहें")
