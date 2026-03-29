@@ -1,12 +1,20 @@
 [
   {
     "name": "PM Kisan",
-    "eligibility": "Farmer",
-    "benefit": "6000/year"
+    "eligibility": "Small and marginal farmers",
+    "benefit": "₹6000/year",
+    "category": "Agriculture"
   },
   {
     "name": "Ayushman Bharat",
-    "eligibility": "Low income",
-    "benefit": "5 lakh insurance"
+    "eligibility": "Economically weaker families",
+    "benefit": "₹5 lakh health insurance",
+    "category": "Health"
+  },
+  {
+    "name": "PM Awas Yojana",
+    "eligibility": "Low income households",
+    "benefit": "Housing subsidy",
+    "category": "Housing"
   }
 ]
